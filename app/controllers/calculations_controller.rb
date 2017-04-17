@@ -10,14 +10,15 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+    text_split_into_array = @text.gsub(/[^a-z0-9\s]/i, "").downcase.split
 
-    @word_count = "Replace this string with your answer."
+    @word_count = text_split_into_array.length
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.gsub(" ", "").gsub("\n","").gsub("\r","").gsub("\t","").length
 
-    @occurrences = "Replace this string with your answer."
+    @occurrences = text_split_into_array.count(@special_word.downcase)
 
     # ================================================================================
     # Your code goes above.
@@ -38,7 +39,7 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = (((@apr/100/12) * (@principal)) / (1- (1+@apr/100/12)**(@years*-12)))
 
     # ================================================================================
     # Your code goes above.
@@ -60,12 +61,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending-@starting
+    @minutes = ((@ending-@starting)/60)
+    @hours = (((@ending-@starting)/60)/60)
+    @days = ((((@ending-@starting)/60)/60)/24)
+    @weeks = (((((@ending-@starting)/60)/60)/24)/7)
+    @years = ((((((@ending-@starting)/60)/60)/24)/7)/52)
 
     # ================================================================================
     # Your code goes above.
@@ -82,27 +83,42 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    ascend = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @minimum = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @maximum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @range = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @median = "Replace this string with your answer."
+    @range = (@numbers.max) - (@numbers.min)
 
-    @sum = "Replace this string with your answer."
 
-    @mean = "Replace this string with your answer."
 
-    @variance = "Replace this string with your answer."
+   if (@count % 2) != 0
+        @median = (@count + 1) / 2.0
+    else
+      @median = ((ascend.length/2.0) + ((ascend.length + 2)/2.0) / 2.0)
+    end
 
-    @standard_deviation = "Replace this string with your answer."
+    @sum = @numbers.sum
 
-    @mode = "Replace this string with your answer."
+    @mean = (@numbers.sum)/(@count)
+
+    @somenumbers = []
+    @variance = @numbers.each do |num|
+      diff = num - @mean
+      square = diff*diff
+      @somenumbers.push(square)
+    end
+      @variance = (@somenumbers.sum)/@count
+
+
+    @standard_deviation = @variance**0.5
+
+    @mode = @numbers.mode
 
     # ================================================================================
     # Your code goes above.
